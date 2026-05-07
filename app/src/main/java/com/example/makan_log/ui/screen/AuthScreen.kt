@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.sp
 import com.example.makan_log.ui.components.*
 import com.example.makan_log.ui.theme.*
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.makan_log.ui.viewmodel.AuthScreenViewModel
+import com.example.makan_log.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AuthScreen(
   startOnLogin: Boolean = true,
-  authViewModel: AuthScreenViewModel = viewModel(),
+  authViewModel: AuthViewModel = viewModel(),
   onNavigateToHome: () -> Unit,
 ) {
   var isLoginTab by rememberSaveable { mutableStateOf(startOnLogin) }

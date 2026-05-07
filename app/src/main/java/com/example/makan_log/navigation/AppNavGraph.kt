@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.makan_log.ui.screen.AuthScreen
 import com.example.makan_log.ui.screen.HomeScreen
-import com.example.makan_log.ui.viewmodel.AuthScreenViewModel
+import com.example.makan_log.ui.viewmodel.AuthViewModel
 
 @Composable
 fun AppNavGraph() {
@@ -32,11 +32,11 @@ fun AppNavGraph() {
     ) { backStackEntry ->
       val tab = backStackEntry.arguments?.getString("tab") ?: "login"
 
-      val vmAuthScreen: AuthScreenViewModel = viewModel()
+      val authViewModel: AuthViewModel = viewModel()
 
       AuthScreen(
         startOnLogin = tab == "login",
-        authViewModel = vmAuthScreen,
+        authViewModel,
         onNavigateToHome = { navController.navigate(Routes.Home) },
       )
     }
