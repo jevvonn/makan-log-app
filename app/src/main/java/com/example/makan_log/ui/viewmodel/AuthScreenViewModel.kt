@@ -11,47 +11,47 @@ import kotlinx.serialization.json.put
 
 class AuthScreenViewModel : ViewModel() {
 
-    fun login(
-        email: String,
-        password: String,
-        onSuccess: () -> Unit = {},
-    ) {
-        viewModelScope.launch {
-            try {
-                Supabase.client.auth.signInWith(Email) {
-                    this.email = email
-                    this.password = password
-                }
-
-                println("Login success")
-                onSuccess()
-            } catch (e: Exception) {
-                println("Login failed: ${e.message}")
-            }
+  fun login(
+    email: String,
+    password: String,
+    onSuccess: () -> Unit = {},
+  ) {
+    viewModelScope.launch {
+      try {
+        Supabase.client.auth.signInWith(Email) {
+          this.email = email
+          this.password = password
         }
+
+        println("Login success")
+        onSuccess()
+      } catch (e: Exception) {
+        println("Login failed: ${e.message}")
+      }
     }
+  }
 
-    fun register(
-        username: String,
-        email: String,
-        password: String,
-        onSuccess: () -> Unit = {},
-    ) {
-        viewModelScope.launch {
-            try {
-                Supabase.client.auth.signUpWith(Email) {
-                    this.email = email
-                    this.password = password
-                    this.data = buildJsonObject {
-                        put("username", username)
-                    }
-                }
-
-                println("Register success")
-                onSuccess()
-            } catch (e: Exception) {
-                println("Register failed: ${e.message}")
-            }
+  fun register(
+    username: String,
+    email: String,
+    password: String,
+    onSuccess: () -> Unit = {},
+  ) {
+    viewModelScope.launch {
+      try {
+        Supabase.client.auth.signUpWith(Email) {
+          this.email = email
+          this.password = password
+          this.data = buildJsonObject {
+            put("username", username)
+          }
         }
+
+        println("Register success")
+        onSuccess()
+      } catch (e: Exception) {
+        println("Register failed: ${e.message}")
+      }
     }
+  }
 }

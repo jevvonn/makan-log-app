@@ -26,76 +26,76 @@ import com.example.makan_log.ui.theme.*
 
 @Composable
 fun AppTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    modifier: Modifier = Modifier,
-    placeholder: String = "",
-    isPassword: Boolean = false,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    singleLine: Boolean = true,
+  value: String,
+  onValueChange: (String) -> Unit,
+  label: String,
+  modifier: Modifier = Modifier,
+  placeholder: String = "",
+  isPassword: Boolean = false,
+  keyboardType: KeyboardType = KeyboardType.Text,
+  singleLine: Boolean = true,
 ) {
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+  var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-    val visualTransformation = when {
-        isPassword && !passwordVisible -> PasswordVisualTransformation()
-        else -> VisualTransformation.None
-    }
+  val visualTransformation = when {
+    isPassword && !passwordVisible -> PasswordVisualTransformation()
+    else -> VisualTransformation.None
+  }
 
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text       = label,
-            fontSize   = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color      = BrownDark,
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        BasicTextField(
-            value               = value,
-            onValueChange       = onValueChange,
-            singleLine          = singleLine,
-            visualTransformation = visualTransformation,
-            keyboardOptions     = KeyboardOptions(keyboardType = keyboardType),
-            textStyle           = TextStyle(
-                color    = BrownDark,
+  Column(modifier = modifier.fillMaxWidth()) {
+    Text(
+      text = label,
+      fontSize = 14.sp,
+      fontWeight = FontWeight.Bold,
+      color = BrownDark,
+    )
+    Spacer(modifier = Modifier.height(6.dp))
+    BasicTextField(
+      value = value,
+      onValueChange = onValueChange,
+      singleLine = singleLine,
+      visualTransformation = visualTransformation,
+      keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+      textStyle = TextStyle(
+        color = BrownDark,
+        fontSize = 15.sp,
+      ),
+      decorationBox = { innerTextField ->
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier = Modifier
+            .fillMaxWidth()
+            .background(CoralLight, RoundedCornerShape(14.dp))
+            .padding(horizontal = 16.dp, vertical = 15.dp),
+        ) {
+          Box(modifier = Modifier.weight(1f)) {
+            if (value.isEmpty()) {
+              Text(
+                text = placeholder,
+                color = BrownMuted,
                 fontSize = 15.sp,
-            ),
-            decorationBox = { innerTextField ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(CoralLight, RoundedCornerShape(14.dp))
-                        .padding(horizontal = 16.dp, vertical = 15.dp),
-                ) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        if (value.isEmpty()) {
-                            Text(
-                                text  = placeholder,
-                                color = BrownMuted,
-                                fontSize = 15.sp,
-                            )
-                        }
-                        innerTextField()
-                    }
-                    if (isPassword) {
-                        IconButton(
-                            onClick = { passwordVisible = !passwordVisible },
-                            modifier = Modifier.size(24.dp),
-                        ) {
-                            Icon(
-                                imageVector = if (passwordVisible)
-                                    Icons.Outlined.Visibility
-                                else
-                                    Icons.Outlined.VisibilityOff,
-                                contentDescription = if (passwordVisible) "Sembunyikan password" else "Tampilkan password",
-                                tint = BrownMuted,
-                                modifier = Modifier.size(20.dp),
-                            )
-                        }
-                    }
-                }
-            },
-        )
-    }
+              )
+            }
+            innerTextField()
+          }
+          if (isPassword) {
+            IconButton(
+              onClick = { passwordVisible = !passwordVisible },
+              modifier = Modifier.size(24.dp),
+            ) {
+              Icon(
+                imageVector = if (passwordVisible)
+                  Icons.Outlined.Visibility
+                else
+                  Icons.Outlined.VisibilityOff,
+                contentDescription = if (passwordVisible) "Sembunyikan password" else "Tampilkan password",
+                tint = BrownMuted,
+                modifier = Modifier.size(20.dp),
+              )
+            }
+          }
+        }
+      },
+    )
+  }
 }

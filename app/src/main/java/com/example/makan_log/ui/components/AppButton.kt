@@ -16,28 +16,28 @@ import com.example.makan_log.ui.theme.White
 
 @Composable
 fun AppButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
+  text: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
 ) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        shape = RoundedCornerShape(100.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Coral,
-            contentColor   = White,
-        ),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(52.dp),
-    ) {
-        Text(
-            text       = text,
-            fontSize   = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-        )
-    }
+  Button(
+    onClick = onClick,
+    enabled = enabled,
+    shape = RoundedCornerShape(100.dp),
+    colors = ButtonDefaults.buttonColors(
+      containerColor = Coral,
+      contentColor = White,
+    ),
+    modifier = modifier
+      .fillMaxWidth()
+      .height(52.dp),
+  ) {
+    Text(
+      text = text,
+      fontSize = 15.sp,
+      fontWeight = FontWeight.SemiBold,
+    )
+  }
 }
 

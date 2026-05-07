@@ -11,15 +11,15 @@ import com.example.makan_log.navigation.AppNavGraph
 import com.example.makan_log.ui.theme.MakanlogTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MakanlogTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    AppNavGraph()
-                }
-            }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContent {
+      MakanlogTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+          AppNavGraph()
         }
+      }
     }
+  }
 }

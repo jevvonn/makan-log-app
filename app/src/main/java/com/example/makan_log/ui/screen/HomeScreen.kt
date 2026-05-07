@@ -9,46 +9,46 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
-    onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+  onNavigateToLogin: () -> Unit,
+  onNavigateToRegister: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(24.dp),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Text(
+      text = "MakanLog",
+      style = MaterialTheme.typography.headlineLarge
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+      text = "Track your meals, every day.",
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+
+    Spacer(modifier = Modifier.height(48.dp))
+
+    Button(
+      onClick = onNavigateToLogin,
+      modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = "MakanLog",
-            style = MaterialTheme.typography.headlineLarge
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Track your meals, every day.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Button(
-            onClick = onNavigateToLogin,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Login")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(
-            onClick = onNavigateToRegister,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Register")
-        }
+      Text(text = "Login")
     }
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    OutlinedButton(
+      onClick = onNavigateToRegister,
+      modifier = Modifier.fillMaxWidth()
+    ) {
+      Text(text = "Register")
+    }
+  }
 }
 

@@ -9,35 +9,35 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsControllerCompat
 
 private val LightColorScheme = lightColorScheme(
-    primary          = Coral,
-    onPrimary        = White,
-    primaryContainer = CoralLight,
-    onPrimaryContainer = BrownDark,
-    secondary        = BrownMid,
-    onSecondary      = White,
-    background       = Cream,
-    onBackground     = BrownDark,
-    surface          = White,
-    onSurface        = BrownDark,
-    onSurfaceVariant = BrownMuted,
-    outline          = CoralSurface,
+  primary = Coral,
+  onPrimary = White,
+  primaryContainer = CoralLight,
+  onPrimaryContainer = BrownDark,
+  secondary = BrownMid,
+  onSecondary = White,
+  background = Cream,
+  onBackground = BrownDark,
+  surface = White,
+  onSurface = BrownDark,
+  onSurfaceVariant = BrownMuted,
+  outline = CoralSurface,
 )
 
 @Composable
 fun MakanlogTheme(
-    content: @Composable () -> Unit
+  content: @Composable () -> Unit
 ) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars = true
-        }
+  val view = LocalView.current
+  if (!view.isInEditMode) {
+    SideEffect {
+      val window = (view.context as Activity).window
+      WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars = true
     }
+  }
 
-    MaterialTheme(
-        colorScheme = LightColorScheme,
-        typography  = Typography,
-        content     = content
-    )
+  MaterialTheme(
+    colorScheme = LightColorScheme,
+    typography = Typography,
+    content = content
+  )
 }

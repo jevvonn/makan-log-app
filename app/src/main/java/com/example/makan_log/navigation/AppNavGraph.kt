@@ -13,32 +13,32 @@ import com.example.makan_log.ui.viewmodel.AuthScreenViewModel
 
 @Composable
 fun AppNavGraph() {
-    val navController = rememberNavController()
+  val navController = rememberNavController()
 
-    NavHost(
-        navController    = navController,
-        startDestination = Routes.Home,
-    ) {
-        composable(Routes.Home) {
-            HomeScreen(
-                onNavigateToLogin    = { navController.navigate(Routes.AuthLogin) },
-                onNavigateToRegister = { navController.navigate(Routes.AuthRegister) },
-            )
-        }
-
-        composable(
-            route = Routes.Auth,
-            arguments = listOf(navArgument("tab") { type = NavType.StringType }),
-        ) { backStackEntry ->
-            val tab = backStackEntry.arguments?.getString("tab") ?: "login"
-
-            val vmAuthScreen: AuthScreenViewModel = viewModel()
-
-            AuthScreen(
-                startOnLogin = tab == "login",
-                authViewModel = vmAuthScreen,
-                onNavigateToHome = { navController.navigate(Routes.Home) },
-            )
-        }
+  NavHost(
+    navController = navController,
+    startDestination = Routes.Home,
+  ) {
+    composable(Routes.Home) {
+      HomeScreen(
+        onNavigateToLogin = { navController.navigate(Routes.AuthLogin) },
+        onNavigateToRegister = { navController.navigate(Routes.AuthRegister) },
+      )
     }
+
+    composable(
+      route = Routes.Auth,
+      arguments = listOf(navArgument("tab") { type = NavType.StringType }),
+    ) { backStackEntry ->
+      val tab = backStackEntry.arguments?.getString("tab") ?: "login"
+
+      val vmAuthScreen: AuthScreenViewModel = viewModel()
+
+      AuthScreen(
+        startOnLogin = tab == "login",
+        authViewModel = vmAuthScreen,
+        onNavigateToHome = { navController.navigate(Routes.Home) },
+      )
+    }
+  }
 }

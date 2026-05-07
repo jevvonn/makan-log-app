@@ -19,37 +19,37 @@ import com.example.makan_log.ui.theme.White
 
 @Composable
 fun AuthHeader(modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = modifier,
+  ) {
+    Box(
+      contentAlignment = Alignment.Center,
+      modifier = Modifier
+        .size(80.dp)
+        .background(Coral, RoundedCornerShape(22.dp)),
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(80.dp)
-                .background(Coral, RoundedCornerShape(22.dp)),
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Restaurant,
-                contentDescription = "MakanLog",
-                tint = White,
-                modifier = Modifier.size(40.dp),
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text       = "MakanLog",
-            fontSize   = 34.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color      = Coral,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text     = "Catat & bagikan petualangan kulinermu",
-            fontSize = 14.sp,
-            color    = BrownMid,
-        )
+      Icon(
+        imageVector = Icons.Filled.Restaurant,
+        contentDescription = "MakanLog",
+        tint = White,
+        modifier = Modifier.size(40.dp),
+      )
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Text(
+      text = "MakanLog",
+      fontSize = 34.sp,
+      fontWeight = FontWeight.ExtraBold,
+      color = Coral,
+    )
+    Spacer(modifier = Modifier.height(4.dp))
+    Text(
+      text = "Catat & bagikan petualangan kulinermu",
+      fontSize = 14.sp,
+      color = BrownMid,
+    )
+  }
 }

@@ -8,15 +8,15 @@ import io.github.jan.supabase.auth.FlowType
 
 object Supabase {
 
-    val client = createSupabaseClient(
-        supabaseUrl = BuildConfig.SUPABASE_URL,
-        supabaseKey = BuildConfig.SUPABASE_PUBLISHABLE_KEY
-    ) {
-        install(Postgrest)
-        install(Auth) {
-            flowType = FlowType.PKCE
-            scheme = "app"
-            host = "supabase.com"
-        }
+  val client = createSupabaseClient(
+    supabaseUrl = BuildConfig.SUPABASE_URL,
+    supabaseKey = BuildConfig.SUPABASE_PUBLISHABLE_KEY
+  ) {
+    install(Postgrest)
+    install(Auth) {
+      flowType = FlowType.PKCE
+      scheme = "app"
+      host = "supabase.com"
     }
+  }
 }
