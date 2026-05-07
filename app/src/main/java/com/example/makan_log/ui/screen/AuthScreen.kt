@@ -22,9 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.makan_log.ui.components.*
 import com.example.makan_log.ui.theme.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.makan_log.ui.viewmodel.AuthScreenViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun AuthScreen(startOnLogin: Boolean = true) {
+fun AuthScreen(
+    startOnLogin: Boolean = true,
+    authViewModel: AuthScreenViewModel =  viewModel(),
+    onNavigateToHome: () -> Unit,
+) {
     var isLoginTab by rememberSaveable { mutableStateOf(startOnLogin) }
 
     var loginEmail    by rememberSaveable { mutableStateOf("") }
@@ -34,139 +41,180 @@ fun AuthScreen(startOnLogin: Boolean = true) {
     var regEmail    by rememberSaveable { mutableStateOf("") }
     var regPassword by rememberSaveable { mutableStateOf("") }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Cream),
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        modifier = Modifier.fillMaxSize(),
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp)
-                .padding(top = 64.dp, bottom = 40.dp),
+                .padding(paddingValues)
+                .background(Cream),
         ) {
-            AuthHeader()
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Card(
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                modifier = Modifier.fillMaxWidth(),
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 64.dp, bottom = 40.dp),
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                AuthHeader()
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Card(
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    AuthTabRow(
-                        isLoginSelected = isLoginTab,
-                        onLoginClick    = { isLoginTab = true },
-                        onRegisterClick = { isLoginTab = false },
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    if (isLoginTab) {
-                        AppTextField(
-                            value         = loginEmail,
-                            onValueChange = { loginEmail = it },
-                            label         = "Email",
-                            placeholder   = "email@contoh.com",
-                            keyboardType  = KeyboardType.Email,
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                    ) {
+                        AuthTabRow(
+                            isLoginSelected = isLoginTab,
+                            onLoginClick    = { isLoginTab = true },
+                            onRegisterClick = { isLoginTab = false },
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                        AppTextField(
-                            value         = loginPassword,
-                            onValueChange = { loginPassword = it },
-                            label         = "Password",
-                            placeholder   = "••••••••",
-                            isPassword    = true,
-                        )
-
-                        Box(
-                            contentAlignment = Alignment.CenterEnd,
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            TextButton(onClick = { /* TODO: forgot password */ }) {
-                                Text(
-                                    text       = "Lupa password?",
-                                    fontSize   = 13.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color      = Coral,
-                                )
-                            }
-                        }
-                    } else {
-                        AppTextField(
-                            value         = regUsername,
-                            onValueChange = { regUsername = it },
-                            label         = "Username",
-                            placeholder   = "username",
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        AppTextField(
-                            value         = regEmail,
-                            onValueChange = { regEmail = it },
-                            label         = "Email",
-                            placeholder   = "email@contoh.com",
-                            keyboardType  = KeyboardType.Email,
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        AppTextField(
-                            value         = regPassword,
-                            onValueChange = { regPassword = it },
-                            label         = "Password",
-                            placeholder   = "••••••••",
-                            isPassword    = true,
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    AppButton(
-                        text    = if (isLoginTab) "Masuk" else "Daftar",
-                        onClick = { /* TODO: handle auth */ },
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(28.dp))
-
-            TextButton(
-                onClick = { isLoginTab = !isLoginTab },
-            ) {
-                Text(
-                    text = buildAnnotatedString {
                         if (isLoginTab) {
-                            withStyle(SpanStyle(color = BrownMid, fontWeight = FontWeight.Normal)) {
-                                append("Belum punya akun? ")
-                            }
-                            withStyle(SpanStyle(color = Coral, fontWeight = FontWeight.SemiBold)) {
-                                append("Daftar di sini")
+                            AppTextField(
+                                value         = loginEmail,
+                                onValueChange = { loginEmail = it },
+                                label         = "Email",
+                                placeholder   = "email@contoh.com",
+                                keyboardType  = KeyboardType.Email,
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            AppTextField(
+                                value         = loginPassword,
+                                onValueChange = { loginPassword = it },
+                                label         = "Password",
+                                placeholder   = "••••••••",
+                                isPassword    = true,
+                            )
+
+                            Box(
+                                contentAlignment = Alignment.CenterEnd,
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                TextButton(onClick = { /* TODO: forgot password */ }) {
+                                    Text(
+                                        text       = "Lupa password?",
+                                        fontSize   = 13.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color      = Coral,
+                                    )
+                                }
                             }
                         } else {
-                            withStyle(SpanStyle(color = BrownMid, fontWeight = FontWeight.Normal)) {
-                                append("Sudah punya akun? ")
-                            }
-                            withStyle(SpanStyle(color = Coral, fontWeight = FontWeight.SemiBold)) {
-                                append("Masuk di sini")
-                            }
+                            AppTextField(
+                                value         = regUsername,
+                                onValueChange = { regUsername = it },
+                                label         = "Username",
+                                placeholder   = "username",
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            AppTextField(
+                                value         = regEmail,
+                                onValueChange = { regEmail = it },
+                                label         = "Email",
+                                placeholder   = "email@contoh.com",
+                                keyboardType  = KeyboardType.Email,
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            AppTextField(
+                                value         = regPassword,
+                                onValueChange = { regPassword = it },
+                                label         = "Password",
+                                placeholder   = "••••••••",
+                                isPassword    = true,
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
-                    },
-                    fontSize = 14.sp,
-                )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        AppButton(
+                            text    = if (isLoginTab) "Masuk" else "Daftar",
+                            onClick = {
+                                if (isLoginTab) {
+                                    authViewModel.login(
+                                        email = loginEmail,
+                                        password = loginPassword,
+                                        onSuccess = {
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar(
+                                                    message = "Login Berhasil! Selamat datang kembali.",
+                                                    duration = SnackbarDuration.Long,
+                                                    withDismissAction = true
+                                                )
+                                            }
+                                            onNavigateToHome()
+                                        }
+                                    )
+                                } else {
+                                    authViewModel.register(
+                                        username = regUsername,
+                                        email = regEmail,
+                                        password = regPassword,
+                                        onSuccess = {
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar(
+                                                    message = "Register Berhasil! Silakan masuk dengan akun baru Anda.",
+                                                    duration = SnackbarDuration.Short,
+                                                    withDismissAction = true
+                                                )
+                                            }
+                                            isLoginTab = true
+                                        }
+                                    )
+                                }
+                            },
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(28.dp))
+
+                TextButton(
+                    onClick = { isLoginTab = !isLoginTab },
+                ) {
+                    Text(
+                        text = buildAnnotatedString {
+                            if (isLoginTab) {
+                                withStyle(SpanStyle(color = BrownMid, fontWeight = FontWeight.Normal)) {
+                                    append("Belum punya akun? ")
+                                }
+                                withStyle(SpanStyle(color = Coral, fontWeight = FontWeight.SemiBold)) {
+                                    append("Daftar di sini")
+                                }
+                            } else {
+                                withStyle(SpanStyle(color = BrownMid, fontWeight = FontWeight.Normal)) {
+                                    append("Sudah punya akun? ")
+                                }
+                                withStyle(SpanStyle(color = Coral, fontWeight = FontWeight.SemiBold)) {
+                                    append("Masuk di sini")
+                                }
+                            }
+                        },
+                        fontSize = 14.sp,
+                    )
+                }
             }
         }
     }

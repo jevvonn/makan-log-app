@@ -1,6 +1,7 @@
 package com.example.makan_log.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.makan_log.ui.screen.AuthScreen
 import com.example.makan_log.ui.screen.HomeScreen
+import com.example.makan_log.ui.viewmodel.AuthScreenViewModel
 
 @Composable
 fun AppNavGraph() {
@@ -29,7 +31,14 @@ fun AppNavGraph() {
             arguments = listOf(navArgument("tab") { type = NavType.StringType }),
         ) { backStackEntry ->
             val tab = backStackEntry.arguments?.getString("tab") ?: "login"
-            AuthScreen(startOnLogin = tab == "login")
+
+            val vmAuthScreen: AuthScreenViewModel = viewModel()
+
+            AuthScreen(
+                startOnLogin = tab == "login",
+                authViewModel = vmAuthScreen,
+                onNavigateToHome = { navController.navigate(Routes.Home) },
+            )
         }
     }
 }
