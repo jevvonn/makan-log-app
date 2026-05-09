@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.makan_log.navigation.AppNavGraph
+import com.example.makan_log.ui.navigation.NavGraph
 import com.example.makan_log.ui.theme.MakanlogTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       MakanlogTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-          AppNavGraph()
+          NavGraph()
         }
       }
     }

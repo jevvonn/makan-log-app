@@ -1,4 +1,4 @@
-package com.example.makan_log.ui.components
+package com.example.makan_log.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

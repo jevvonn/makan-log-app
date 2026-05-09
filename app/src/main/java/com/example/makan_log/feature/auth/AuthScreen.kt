@@ -1,4 +1,4 @@
-package com.example.makan_log.ui.screen
+package com.example.makan_log.feature.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,10 +20,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.makan_log.ui.components.*
-import com.example.makan_log.ui.theme.*
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.makan_log.ui.viewmodel.AuthViewModel
+import com.example.makan_log.ui.component.AppButton
+import com.example.makan_log.ui.component.AppTextField
+import com.example.makan_log.ui.component.AuthHeader
+import com.example.makan_log.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -151,6 +152,7 @@ fun AuthScreen(
 
             AppButton(
               text = if (isLoginTab) "Masuk" else "Daftar",
+              enabled = !authViewModel.isLoading,
               onClick = {
                 if (isLoginTab) {
                   authViewModel.login(
@@ -165,7 +167,7 @@ fun AuthScreen(
                         )
                       }
                       onNavigateToHome()
-                    }
+                    },
                   )
                 } else {
                   authViewModel.register(

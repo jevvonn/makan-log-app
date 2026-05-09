@@ -1,4 +1,4 @@
-package com.example.makan_log.ui.components
+package com.example.makan_log.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -99,3 +99,4 @@ fun AppTextField(
     )
   }
 }
+

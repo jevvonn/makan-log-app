@@ -1,4 +1,4 @@
-package com.example.makan_log.navigation
+package com.example.makan_log.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -7,27 +7,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.makan_log.ui.screen.AuthScreen
-import com.example.makan_log.ui.screen.HomeScreen
-import com.example.makan_log.ui.viewmodel.AuthViewModel
+import com.example.makan_log.feature.auth.AuthScreen
+import com.example.makan_log.feature.auth.AuthViewModel
+import com.example.makan_log.feature.home.HomeScreen
 
 @Composable
-fun AppNavGraph() {
+fun NavGraph() {
   val navController = rememberNavController()
 
   NavHost(
     navController = navController,
-    startDestination = Routes.Home,
+    startDestination = Route.Home,
   ) {
-    composable(Routes.Home) {
+    composable(Route.Home) {
       HomeScreen(
-        onNavigateToLogin = { navController.navigate(Routes.AuthLogin) },
-        onNavigateToRegister = { navController.navigate(Routes.AuthRegister) },
+        onNavigateToLogin = { navController.navigate(Route.AuthLogin) },
+        onNavigateToRegister = { navController.navigate(Route.AuthRegister) },
       )
     }
 
     composable(
-      route = Routes.Auth,
+      route = Route.Auth,
       arguments = listOf(navArgument("tab") { type = NavType.StringType }),
     ) { backStackEntry ->
       val tab = backStackEntry.arguments?.getString("tab") ?: "login"
@@ -36,9 +36,10 @@ fun AppNavGraph() {
 
       AuthScreen(
         startOnLogin = tab == "login",
-        authViewModel,
-        onNavigateToHome = { navController.navigate(Routes.Home) },
+        authViewModel = authViewModel,
+        onNavigateToHome = { navController.navigate(Route.Home) },
       )
     }
   }
 }
+
