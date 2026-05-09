@@ -36,13 +36,7 @@ fun NavGraph() {
       LaunchedEffect(authState) {
         when (authState) {
           AuthState.Loading -> Unit
-          AuthState.Unauthenticated -> {
-            navController.navigate(Route.AuthLogin) {
-              popUpTo(Route.Splash) { inclusive = true }
-            }
-          }
-
-          is AuthState.Authenticated -> {
+          else -> {
             navController.navigate(Route.Home) {
               popUpTo(Route.Splash) { inclusive = true }
             }
