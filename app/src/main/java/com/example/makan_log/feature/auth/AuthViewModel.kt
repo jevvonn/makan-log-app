@@ -7,8 +7,10 @@ import com.example.makan_log.core.auth.AuthRepository
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import com.example.makan_log.core.util.getMessageFromHttpResponse
 import io.github.jan.supabase.auth.exception.AuthErrorCode
 import io.github.jan.supabase.auth.exception.AuthRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
 
 data object ErrorMessage {
   const val LOGIN_FAILED = "Email atau password salah. Silakan coba lagi."
@@ -29,7 +31,7 @@ class AuthViewModel : ViewModel() {
     email: String,
     password: String,
     onSuccess: () -> Unit = {},
-    onError: (AuthRestException) -> Unit = {},
+    onError: (Exception) -> Unit = {},
   ) {
     viewModelScope.launch {
       errorMessage = null
@@ -41,7 +43,7 @@ class AuthViewModel : ViewModel() {
         onSuccess()
       } catch (e: AuthRestException) {
         println("Login failed: ${e.message}")
-        setErrorMessage(e)
+        setErrorMessage(e.errorCode)
         onError(e)
       } finally {
         isLoading = false
@@ -54,7 +56,7 @@ class AuthViewModel : ViewModel() {
     email: String,
     password: String,
     onSuccess: () -> Unit = {},
-    onError: (AuthRestException) -> Unit = {},
+    onError: (Exception) -> Unit = {},
   ) {
     viewModelScope.launch {
       errorMessage = null
@@ -64,9 +66,17 @@ class AuthViewModel : ViewModel() {
         AuthRepository.register(username, email, password)
         println("Register success")
         onSuccess()
-      } catch (e: AuthRestException) {
+      } catch (e: Exception) {
         println("Register failed: ${e.message}")
-        setErrorMessage(e)
+
+        if (e is AuthRestException) {
+          setErrorMessage(e.errorCode)
+        }
+
+        if (e is UnknownRestException) {
+          setErrorMessage(customMessage = getMessageFromHttpResponse(e.response))
+        }
+
         onError(e)
       } finally {
         isLoading = false
@@ -76,7 +86,7 @@ class AuthViewModel : ViewModel() {
 
   fun logout(
     onSuccess: () -> Unit = {},
-    onError: (AuthRestException) -> Unit = {},
+    onError: (Exception) -> Unit = {},
   ) {
     viewModelScope.launch {
       errorMessage = null
@@ -88,7 +98,7 @@ class AuthViewModel : ViewModel() {
         onSuccess()
       } catch (e: AuthRestException) {
         println("Logout failed: ${e.message}")
-        setErrorMessage(e)
+        setErrorMessage(e.errorCode)
         onError(e)
       } finally {
         isLoading = false
@@ -96,8 +106,13 @@ class AuthViewModel : ViewModel() {
     }
   }
 
-  private fun setErrorMessage(exception: AuthRestException) {
-    errorMessage = when (exception.errorCode) {
+  private fun setErrorMessage(errorCode: AuthErrorCode? = null, customMessage: String? = null) {
+    if (customMessage != null) {
+      errorMessage = customMessage
+      return
+    }
+
+    errorMessage = when (errorCode) {
       AuthErrorCode.InvalidCredentials -> ErrorMessage.LOGIN_FAILED
       AuthErrorCode.UserAlreadyExists -> ErrorMessage.EMAIL_USED
       AuthErrorCode.WeakPassword -> ErrorMessage.WEAK_PASSWORD
