@@ -42,22 +42,6 @@ fun HomeScreen(
 
     Spacer(modifier = Modifier.height(48.dp))
 
-    Button(
-      onClick = onNavigateToLogin,
-      modifier = Modifier.fillMaxWidth(),
-    ) {
-      Text(text = "Login")
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    OutlinedButton(
-      onClick = onNavigateToRegister,
-      modifier = Modifier.fillMaxWidth(),
-    ) {
-      Text(text = "Register")
-    }
-
     if (authUser != null) {
       OutlinedButton(
         modifier = Modifier.fillMaxWidth(),
@@ -70,6 +54,22 @@ fun HomeScreen(
         enabled = !authViewModel.isLoading,
       ) {
         Text(text = "Logout")
+      }
+    } else {
+      Button(
+        onClick = onNavigateToLogin,
+        modifier = Modifier.fillMaxWidth(),
+      ) {
+        Text(text = "Login")
+      }
+
+      Spacer(modifier = Modifier.height(12.dp))
+
+      OutlinedButton(
+        onClick = onNavigateToRegister,
+        modifier = Modifier.fillMaxWidth(),
+      ) {
+        Text(text = "Register")
       }
     }
   }

@@ -21,6 +21,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.makan_log.ui.component.AlertType
+import com.example.makan_log.ui.component.AppAlert
 import com.example.makan_log.ui.component.AppButton
 import com.example.makan_log.ui.component.AppTextField
 import com.example.makan_log.ui.component.AuthHeader
@@ -44,6 +46,20 @@ fun AuthScreen(
 
   val snackbarHostState = remember { SnackbarHostState() }
   val scope = rememberCoroutineScope()
+
+  fun resetForm() {
+    loginEmail = ""
+    loginPassword = ""
+
+    regUsername = ""
+    regEmail = ""
+    regPassword = ""
+  }
+  
+  LaunchedEffect(isLoginTab) {
+    authViewModel.errorMessage = null
+    resetForm()
+  }
 
   Scaffold(
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -83,7 +99,15 @@ fun AuthScreen(
               onRegisterClick = { isLoginTab = false },
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            if (authViewModel.errorMessage != null) {
+              AppAlert(
+                message = authViewModel.errorMessage!!,
+                type = AlertType.Danger,
+                Modifier.padding(vertical = 20.dp)
+              )
+            } else {
+              Spacer(modifier = Modifier.height(24.dp))
+            }
 
             if (isLoginTab) {
               AppTextField(
