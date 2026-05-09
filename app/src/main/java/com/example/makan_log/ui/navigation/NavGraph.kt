@@ -1,12 +1,7 @@
 package com.example.makan_log.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -20,6 +15,7 @@ import com.example.makan_log.feature.auth.AuthViewModel
 import com.example.makan_log.feature.home.HomeScreen
 import androidx.compose.runtime.getValue
 import com.example.makan_log.core.auth.AuthState
+import com.example.makan_log.feature.splash.SplashScreen
 
 @Composable
 fun NavGraph() {
@@ -66,13 +62,6 @@ fun NavGraph() {
         onNavigateToHome = { navController.navigate(Route.Home) },
       )
     }
-  }
-}
-
-@Composable
-private fun SplashScreen() {
-  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-    CircularProgressIndicator()
   }
 }
 
