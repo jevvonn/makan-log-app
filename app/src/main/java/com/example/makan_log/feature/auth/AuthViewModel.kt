@@ -62,6 +62,8 @@ class AuthViewModel : ViewModel() {
     onError: (Exception) -> Unit = {},
   ) {
     viewModelScope.launch {
+      isLoading = true
+
       try {
         AuthRepository.logout()
         println("Logout success")
@@ -69,6 +71,8 @@ class AuthViewModel : ViewModel() {
       } catch (e: Exception) {
         println("Logout failed: ${e.message}")
         onError(e)
+      } finally {
+        isLoading = false
       }
     }
   }

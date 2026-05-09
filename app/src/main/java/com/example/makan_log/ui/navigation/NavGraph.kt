@@ -1,24 +1,56 @@
 package com.example.makan_log.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.makan_log.core.auth.AuthRepository
 import com.example.makan_log.feature.auth.AuthScreen
 import com.example.makan_log.feature.auth.AuthViewModel
 import com.example.makan_log.feature.home.HomeScreen
+import androidx.compose.runtime.getValue
+import com.example.makan_log.core.auth.AuthState
 
 @Composable
 fun NavGraph() {
   val navController = rememberNavController()
+  val authState by AuthRepository.state.collectAsStateWithLifecycle()
 
   NavHost(
     navController = navController,
-    startDestination = Route.Home,
+    startDestination = Route.Splash,
   ) {
+    composable(Route.Splash) {
+      SplashScreen()
+
+      LaunchedEffect(authState) {
+        when (authState) {
+          AuthState.Loading -> Unit
+          AuthState.Unauthenticated -> {
+            navController.navigate(Route.AuthLogin) {
+              popUpTo(Route.Splash) { inclusive = true }
+            }
+          }
+
+          is AuthState.Authenticated -> {
+            navController.navigate(Route.Home) {
+              popUpTo(Route.Splash) { inclusive = true }
+            }
+          }
+        }
+      }
+    }
+
     composable(Route.Home) {
       HomeScreen(
         onNavigateToLogin = { navController.navigate(Route.AuthLogin) },
@@ -40,6 +72,13 @@ fun NavGraph() {
         onNavigateToHome = { navController.navigate(Route.Home) },
       )
     }
+  }
+}
+
+@Composable
+private fun SplashScreen() {
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    CircularProgressIndicator()
   }
 }
 
