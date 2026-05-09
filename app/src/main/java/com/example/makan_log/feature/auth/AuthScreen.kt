@@ -103,20 +103,6 @@ fun AuthScreen(
                 placeholder = "••••••••",
                 isPassword = true,
               )
-
-              Box(
-                contentAlignment = Alignment.CenterEnd,
-                modifier = Modifier.fillMaxWidth(),
-              ) {
-                TextButton(onClick = { /* TODO: forgot password */ }) {
-                  Text(
-                    text = "Lupa password?",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Coral,
-                  )
-                }
-              }
             } else {
               AppTextField(
                 value = regUsername,
