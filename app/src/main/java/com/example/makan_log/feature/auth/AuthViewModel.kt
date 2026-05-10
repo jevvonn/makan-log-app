@@ -7,7 +7,7 @@ import com.example.makan_log.core.auth.AuthRepository
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
-import com.example.makan_log.core.util.getMessageFromHttpResponse
+import com.example.makan_log.core.util.GetMessageFromHttpResponse
 import io.github.jan.supabase.auth.exception.AuthErrorCode
 import io.github.jan.supabase.auth.exception.AuthRestException
 import io.github.jan.supabase.exceptions.UnknownRestException
@@ -74,7 +74,7 @@ class AuthViewModel : ViewModel() {
         }
 
         if (e is UnknownRestException) {
-          setErrorMessage(customMessage = getMessageFromHttpResponse(e.response))
+          setErrorMessage(customMessage = GetMessageFromHttpResponse(e.response))
         }
 
         onError(e)

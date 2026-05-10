@@ -4,7 +4,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import org.json.JSONObject
 
-suspend fun getMessageFromHttpResponse(response: HttpResponse): String? {
+suspend fun GetMessageFromHttpResponse(response: HttpResponse): String? {
   return try {
     val rawJsonString = response.bodyAsText()
 
