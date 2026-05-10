@@ -9,5 +9,17 @@ object Route {
   const val AuthLogin = "auth/login"
 
   const val AuthRegister = "auth/register"
+
+  const val Bookmark = "bookmark"
+
+  const val Profile = "profile"
+
+  const val Create = "create"
 }
+
+val routesWithBottomBar = setOf(
+  Route.Home,
+  Route.Bookmark,
+  Route.Profile,
+)
 
