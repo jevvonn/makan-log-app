@@ -15,11 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.makan_log.ui.theme.*
@@ -34,6 +37,8 @@ fun AppTextField(
   isPassword: Boolean = false,
   keyboardType: KeyboardType = KeyboardType.Text,
   singleLine: Boolean = true,
+  minHeight: Dp? = null,
+  labelAnnotated: AnnotatedString? = null,
 ) {
   var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -43,12 +48,21 @@ fun AppTextField(
   }
 
   Column(modifier = modifier.fillMaxWidth()) {
-    Text(
-      text = label,
-      fontSize = 14.sp,
-      fontWeight = FontWeight.Bold,
-      color = BrownDark,
-    )
+    if (labelAnnotated != null) {
+      Text(
+        text = labelAnnotated,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        color = BrownDark,
+      )
+    } else {
+      Text(
+        text = label,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        color = BrownDark,
+      )
+    }
     Spacer(modifier = Modifier.height(6.dp))
     BasicTextField(
       value = value,
@@ -57,18 +71,24 @@ fun AppTextField(
       visualTransformation = visualTransformation,
       keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
       textStyle = TextStyle(
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
         color = BrownDark,
         fontSize = 15.sp,
       ),
       decorationBox = { innerTextField ->
         Row(
-          verticalAlignment = Alignment.CenterVertically,
+          verticalAlignment = if (minHeight != null) Alignment.Top else Alignment.CenterVertically,
           modifier = Modifier
             .fillMaxWidth()
             .background(CoralLight, RoundedCornerShape(14.dp))
-            .padding(horizontal = 16.dp, vertical = 15.dp),
+            .heightIn(min = minHeight ?: 56.dp)
+            .padding(horizontal = 16.dp)
+            .padding(vertical = if (minHeight != null) 15.dp else 0.dp)
         ) {
-          Box(modifier = Modifier.weight(1f)) {
+          Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart,
+          ) {
             if (value.isEmpty()) {
               Text(
                 text = placeholder,
