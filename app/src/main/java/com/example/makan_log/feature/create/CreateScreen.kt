@@ -14,11 +14,15 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -37,9 +41,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.makan_log.ui.component.AppButton
 import com.example.makan_log.ui.component.AppTextField
 import com.example.makan_log.ui.component.BackButton
@@ -143,10 +151,72 @@ private fun MasakSendiriCard(
 }
 
 @Composable
+fun DialogSuccess(onConfirm: () -> Unit) {
+  Dialog(
+    onDismissRequest = {}
+  ) {
+    Card(
+      modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight(),
+      shape = RoundedCornerShape(16.dp),
+    ) {
+      Column(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(vertical = 24.dp, horizontal = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Icon(
+          imageVector = Icons.Filled.CheckCircle,
+          contentDescription = "Berhasil Upload",
+          tint = Coral,
+          modifier = Modifier.size(64.dp)
+        )
+
+        Text(
+          text = "Postinganmu Berhasil Diunggah!",
+          modifier = Modifier.padding(24.dp),
+          fontSize = 16.sp,
+          textAlign = TextAlign.Center
+        )
+        Row(
+          modifier = Modifier
+            .fillMaxWidth(),
+          horizontalArrangement = Arrangement.Center,
+        ) {
+          AppButton(
+            text = "Okay",
+            onClick = { onConfirm() },
+            modifier = Modifier.padding(8.dp),
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
 fun CreateScreen(
   onNavigateBack: () -> Unit,
-  createViewModel: CreateViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+  onNavigateToHome: () -> Unit,
+  createViewModel: CreateViewModel = viewModel(),
 ) {
+  var caption by rememberSaveable { mutableStateOf("") }
+  var isHomeCook by rememberSaveable { mutableStateOf(false) }
+  var restaurantName by rememberSaveable { mutableStateOf("") }
+  var recipeLink by rememberSaveable { mutableStateOf("") }
+  val images = remember { mutableStateListOf<Uri>() }
+
+  if (createViewModel.isSuccess) {
+    DialogSuccess(
+      onConfirm = {
+        onNavigateToHome()
+      }
+    )
+  }
+
   Scaffold(
     topBar = { TopBarCreateScreen(onNavigateBack) },
     bottomBar = {
@@ -161,7 +231,25 @@ fun CreateScreen(
         AppButton(
           text = "Posting Sekarang",
           leadingIcon = Icons.AutoMirrored.Rounded.Send,
-          onClick = { },
+          enabled = !createViewModel.isLoading,
+          onClick = {
+            createViewModel.createPost(
+              imageUris = images,
+              caption,
+              restaurantName,
+              isSelfMade = isHomeCook,
+              recipeLink,
+              onSuccess = {
+                caption = ""
+                isHomeCook = false
+                restaurantName = ""
+                recipeLink = ""
+                images.clear()
+
+
+              }
+            )
+          },
         )
       }
     },
@@ -171,11 +259,6 @@ fun CreateScreen(
     containerColor = androidx.compose.ui.graphics.Color.Transparent,
   ) { paddingValues ->
 
-    var caption by rememberSaveable { mutableStateOf("") }
-    var isHomeCook by rememberSaveable { mutableStateOf(false) }
-    var restaurantName by rememberSaveable { mutableStateOf("") }
-    var recipeLink by rememberSaveable { mutableStateOf("") }
-    val images = remember { mutableStateListOf<Uri>() }
 
     val opsionalLabel = buildAnnotatedString {
       append("Nama Restoran ")
@@ -210,6 +293,7 @@ fun CreateScreen(
         label = "Caption",
         placeholder = "Nasi goreng terenak banget, bumbunya meresap...",
         singleLine = false,
+        enabled = !createViewModel.isLoading,
         minHeight = 120.dp,
       )
       Text(
@@ -219,7 +303,7 @@ fun CreateScreen(
         modifier = Modifier
           .fillMaxWidth()
           .padding(top = 4.dp, end = 2.dp),
-        textAlign = androidx.compose.ui.text.style.TextAlign.End,
+        textAlign = TextAlign.End,
       )
 
       Spacer(Modifier.height(16.dp))
@@ -236,6 +320,7 @@ fun CreateScreen(
         onValueChange = { restaurantName = it },
         label = "Nama Restoran",
         labelAnnotated = opsionalLabel,
+        enabled = !createViewModel.isLoading,
         placeholder = "Nasi Goreng Kebon Sirih",
       )
       Text(
@@ -251,9 +336,10 @@ fun CreateScreen(
         value = recipeLink,
         onValueChange = { recipeLink = it },
         label = "Link Resep",
+        enabled = !createViewModel.isLoading,
         labelAnnotated = opsionalRecipeLabel,
         placeholder = "https://...",
-        keyboardType = androidx.compose.ui.text.input.KeyboardType.Uri,
+        keyboardType = KeyboardType.Uri,
       )
 
       Spacer(Modifier.height(28.dp))

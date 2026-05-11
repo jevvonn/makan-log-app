@@ -39,6 +39,7 @@ fun AppTextField(
   singleLine: Boolean = true,
   minHeight: Dp? = null,
   labelAnnotated: AnnotatedString? = null,
+  enabled: Boolean = true,
 ) {
   var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -68,6 +69,7 @@ fun AppTextField(
       value = value,
       onValueChange = onValueChange,
       singleLine = singleLine,
+      enabled = enabled,
       visualTransformation = visualTransformation,
       keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
       textStyle = TextStyle(

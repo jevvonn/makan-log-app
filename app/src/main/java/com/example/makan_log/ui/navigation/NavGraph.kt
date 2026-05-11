@@ -78,7 +78,12 @@ fun NavGraph() {
 
       composable(Route.Create) {
         CreateScreen(
-          onNavigateBack = { navController.popBackStack() }
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToHome = {
+            navController.navigate(Route.Home) {
+              popUpTo(Route.Create) { inclusive = true }
+            }
+          }
         )
       }
 
